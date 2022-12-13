@@ -18,7 +18,7 @@ export class ProductListComponant {
   
   displayImage: boolean = true;
 
-  listFilter: string = 'Leaf';
+  listFilter: string = 'abdo';
 
   products: any[] = [
     {
