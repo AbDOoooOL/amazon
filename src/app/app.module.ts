@@ -13,6 +13,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader} from '@ngx-translate/http-loader';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +23,9 @@ import { TranslateHttpLoader} from '@ngx-translate/http-loader';
     // ProductCategoryService
   ],
   imports: [
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot(),
+
     BrowserModule,
     HttpClientModule,
     TranslateModule.forRoot({
@@ -30,7 +36,6 @@ import { TranslateHttpLoader} from '@ngx-translate/http-loader';
         deps: [HttpClient]
       }
     }),
-
     RouterModule.forRoot([
       {path:'welcome' , component: WelcomeComponant },
       {
@@ -62,7 +67,6 @@ import { TranslateHttpLoader} from '@ngx-translate/http-loader';
       }
     ),
   ],
-  
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
