@@ -15,6 +15,8 @@ import { TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
   imports: [
     BrowserAnimationsModule,
     BsDatepickerModule.forRoot(),
+    TooltipModule.forRoot(),
+    ProgressbarModule.forRoot(),
 
     BrowserModule,
     HttpClientModule,
@@ -71,7 +75,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: CustomInterceptor,
-      multi: true
+      multi: true,
     }
   ],
   bootstrap: [AppComponent]

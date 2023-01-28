@@ -1,8 +1,13 @@
 import { Component } from "@angular/core";
+import { ProgressbarConfig } from "ngx-bootstrap/progressbar";
 
 @Component({
-    templateUrl: '../home/welcome-componant.html'
+    templateUrl: '../home/welcome-componant.html',
+    providers: [{ provide: ProgressbarConfig, useFactory: getProgressbarConfig }]
 })
+
+
+
 export class WelcomeComponant{
     public pageTitle = 'Welcome';
 
@@ -19,4 +24,8 @@ export class WelcomeComponant{
     let data = {id:1,name:'asd'};
     localStorage.setItem('', JSON.stringify(data));
     }
+}
+
+export function getProgressbarConfig(): ProgressbarConfig {
+    return Object.assign(new ProgressbarConfig(), { animate: true, striped: true,  max: 200 });
 }

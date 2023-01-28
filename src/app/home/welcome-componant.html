@@ -4,6 +4,15 @@
         <br>
         {{"GREETINGMESSAGE" | translate}}
     </div>
+
+    <div>
+        <div class="col-xs-12 col-12 col-md-4 form-group mb-3">
+            <input type="text"
+                   placeholder="Datepicker"
+                   class="form-control"
+                   bsDatepicker>
+          </div>
+    </div>
     
     <div class="card-body">
         <div class="container-fluid">
@@ -20,11 +29,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="pr-3 pb-3 pe-3 w-auto">
-        <bs-datepicker-inline [bsValue]="bsInlineValue"></bs-datepicker-inline>
-      </div>
-      <div class="pr-3 pb-3 pe-3 w-auto">
-        <bs-daterangepicker-inline [bsValue]="bsInlineRangeValue"></bs-daterangepicker-inline>
-      </div>
+<div class="mb-2">
+    <progressbar class="progress-striped active"  [value]="150" type="danger"><i>136 / 150</i></progressbar>
 </div>
