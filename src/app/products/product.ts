@@ -6,5 +6,8 @@ export interface IProduct {
     description: string,
     price: number,
     starRating:number,
-    imgUrl:string
+    imgUrl:string,
+    productShortCut: string ,
+    categoryId: number,
+    categoryName?: string
 }

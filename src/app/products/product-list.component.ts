@@ -1,29 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { IProduct } from './product';
+import { ProductService } from './products.service';
+import { Observable, Subscription, catchError, combineLatestWith, map, of } from 'rxjs';
+import { ProductCategoryService } from './products-category.service';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'amzn-products',
   templateUrl: './product-list.component.html',
   // styles: ['thead{color:pink}'],
-  styleUrls: ['./product-list.component.css']
+  styleUrls: ['./product-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class ProductListComponant implements OnInit {
-
-  public birthDate: Date | undefined;
-  public age: number | undefined;
-
-  public CalculateAge(): void {
-    if (this.birthDate) {
-      var timeDiff = Math.abs(Date.now() - new Date(this.birthDate).getTime());
-      this.age = Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25);
-    }
-  }
-
-  myDate = Date.now();
-
-  // ngOnDestroy(): void {
-  //   throw new Error('Method not implemented.');
-  // }
 
   pageTitle: string = "Product List";
 
@@ -35,7 +24,43 @@ export class ProductListComponant implements OnInit {
 
   myImage: string = "assets/images/aleppo.jpg";
 
-  displayImage: boolean = true;
+  displayImage: boolean = false;
+
+  displayCode!: boolean;
+
+  // products$: Observable<IProduct[]> | undefined;
+
+  // filteredProducts: IProduct[] = [];
+
+  sub!: Subscription;
+  errorMessage: any;
+
+  constructor(
+    private productService: ProductService,
+    private categoriesServies: ProductCategoryService,
+    private store: Store<any>
+  ) {
+    //console.log("constroctor...");
+  }
+
+  ngOnInit(): void {
+    this.store.select('products').subscribe(
+      products => {
+        if (products) {
+          this.displayCode = products.showProductCode
+        }
+      })
+  }
+  toggleCode(): void {
+    this.store.dispatch({
+      type: '[Product] Toggle Product code'
+    })
+    // this.displayCode = !this.displayCode;
+  }
+
+  // ngOnDestroy(): void {
+  //   this.sub.unsubscribe();
+  // }
 
   private _listFilter: string = "";
 
@@ -45,50 +70,58 @@ export class ProductListComponant implements OnInit {
 
   public set listFilter(v: string) {
     this._listFilter = v;
-    this.filteredProducts = this.doFilter(v);
+    // this.filteredProducts = this.doFilter(v);
   }
 
-  public doFilter(filterBy: string): IProduct[] {
-    filterBy = filterBy.toLocaleLowerCase();
-    return this.products.filter((product: IProduct)=>
-            product.productName.toLocaleLowerCase().includes(filterBy));
-  }
+  // public doFilter(filterBy: string): IProduct[] {
+  //   filterBy = filterBy.toLocaleLowerCase();
+  //   return this.products.filter((product: IProduct) =>
+  //     product.productName.toLocaleLowerCase().includes(filterBy));
+  // }
 
-  filteredProducts: IProduct[] = [];
+  products$ = this.productService.products$.pipe(
+    catchError(err => {
+      this.errorMessage = err;
+      return of([]);
+    })
+  );
 
-  constructor() {
-    console.log("constroctor...");
-  }
-  ngOnInit(): void {
-    console.log("product list initialztion");
-    this._listFilter = 'abdo';
-  }
-  products: IProduct[] = [
-    {
-      "productId": 1,
-      "productName": "abdo",
-      "productCode": "1-cc",
-      "releseDate": "March 19, 2022",
-      "description": "Hello Every Body!!!!!!!",
-      "price": 500,
-      "starRating": 3.2,
-      "imgUrl": "assets/images/aleppo.jpg"
-    },
-    {
-      "productId": 2,
-      "productName": "mobayed",
-      "productCode": "1-cc",
-      "releseDate": "March 19, 2022",
-      "description": "Hello Every Body!!!!!!!",
-      "price": 300,
-      "starRating": 4.2,
-      "imgUrl": "assets/images/aleppo.jpg"
-    },
-  ];
+  productWithCategories$ = this.categoriesServies.categories$.pipe(
+    combineLatestWith(this.products$),
+    map(([categories, products]) => products.map(product => ({
+      ...product,
+      categoryName: categories.find(c => product.categoryId === c.id)?.name
+    } as IProduct))),
 
+    catchError(err => {
+      this.errorMessage = err;
+      return of([]);
+    })
+  );
 
   toggleImage(): void {
     this.displayImage = !this.displayImage;
-    console.log('toggle button');
   }
+
+  onRatingClicked(message: string): void {
+    this.pageTitle = message;
+  }
+
+  // ngOnInit(): void {
+
+  // this.sub = this.productService.getProducts()
+  //   .subscribe({
+  //     next: products => {
+  //       this.products = products;
+  //       this.filteredProducts = this.products;
+  //     }
+  // });
+  // this.products$ = this.productService.getProducts().pipe(
+  //   catchError(err => {
+  //     this.errorMessage = err;
+  //     return of([]);
+  //   })
+  // );
+
+  // }
 }

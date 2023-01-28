@@ -1,4 +1,5 @@
 <div class="card">
+    <h1>{{errorMessage}}</h1>
     <div class="card-header">
         <!-- <h1>{{pageTitle + ' :'}}</h1> -->
         <h1 [innerText]="pageTitle + ' :'"></h1>
@@ -13,13 +14,21 @@
         </div>
 
         <div class="row">
+            <div class="col-md-2">Show Product Code:</div>
+
+            <div class="col-md-4">
+                <input type="checkbox" (change)="toggleCode()">
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-6">
                 <h4>Filter By: {{listFilter}}</h4>
             </div>
         </div>
 
         <div class="table-responive">
-            <table class="table" *ngIf="products.length" >
+            <table class="table" *ngIf="productWithCategories$ | async as products" >
                 <thead>
                     <tr>
                         <th>
@@ -28,7 +37,7 @@
                             (click)="toggleImage()"
                             [style.margin.px]="imageMar + 30"
                             >
-                                {{displayImage ? 'Hide' : 'Show'}} Image
+                                {{displayImage ? 'Hide' : 'Show'}} Images
                             </button>     
                         </th>
                         <td>
@@ -40,21 +49,39 @@
                             [hidden]="!displayImage">
                         </td>
                     </tr>
-                    <tr>                         
+                    <tr>        
+                        <th>Image</th>
                         <th>Product</th>
-                        <th>Code</th>
+                        <th>Category</th>
+                        <th *ngIf="displayCode">Code</th>
                         <th>Available</th>
+                        <th>short</th>
                         <th>Price</th>
                         <th>Rating</th>                        
                     </tr>
                 </thead>
                  <tbody>
-                    <tr *ngFor="let product of filteredProducts">                         
-                        <td>{{product.productName}}</td>
-                        <td>{{product.productCode | lowercase | convertToSpace :'-' }}</td>
+                    
+                    <tr *ngFor="let product of products"> 
+                        <td>
+                            <img
+                            [src]="myImage"
+                            [title]="myPhoto"
+                            [style.width.px]="imageW"
+                            [style.margin.px]="imageMar"
+                            [hidden]="!displayImage">
+                        </td>                        
+                        <td>
+                            <a [routerLink]="['/products', product.productId]">
+                            {{product.productName}}
+                            </a>
+                        </td>
+                        <td>{{product.categoryId}}</td>
+                        <td *ngIf="displayCode">{{product.productCode | lowercase | convertToSpace :'-' }}</td>
                         <td>{{product.releseDate}}</td>
+                        <td>{{product.productShortCut}}</td>
                         <td>{{product.price | currency:'USD':'symbol':'1.3-3'}}</td>
-                        <td><amzn-star [rating]="product.starRating"></amzn-star></td>               
+                        <td><amzn-star [rating]="product.starRating" (ratingclicked)="onRatingClicked($event)"></amzn-star></td>               
                     </tr>
                  </tbody>                               
             </table>

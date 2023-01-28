@@ -1,0 +1,61 @@
+[
+    {
+        "productId": 1,
+        "productName": "abdo",
+        "productCode": "1-cc",
+        "releseDate": "March 19, 2022",
+        "description": "Hello Every Body!!!!!!!",
+        "price": 500,
+        "starRating": 3.2,
+        "imgUrl": "assets/images/aleppo.jpg",
+        "categoryId": 1
+    },
+    {
+        "productId": 2,
+        "productName": "mobayed",
+        "productCode": "1-cc",
+        "releseDate": "March 19, 2022",
+        "description": "Hello Every Body!!!!!!!",
+        "price": 300,
+        "starRating": 4.2,
+        "imgUrl": "assets/images/aleppo.jpg",
+        "categoryId": 2
+
+    },
+    {
+        "productId": 3,
+        "productName": "abdo",
+        "productCode": "1-cc",
+        "releseDate": "March 19, 2022",
+        "description": "Hello Every Body!!!!!!!",
+        "price": 500,
+        "starRating": 2,
+        "imgUrl": "assets/images/aleppo.jpg",
+        "categoryId": 1
+
+    },
+    {
+        "productId": 4,
+        "productName": "abdo",
+        "productCode": "1-cc",
+        "releseDate": "March 19, 2022",
+        "description": "Hello Every Body!!!!!!!",
+        "price": 500,
+        "starRating": 5,
+        "imgUrl": "assets/images/aleppo.jpg",
+        "categoryId": 2
+
+    },
+    {
+        "productId": 5,
+        "productName": "abdo",
+        "productCode": "5-cc",
+        "releseDate": "March 19, 2022",
+        "description": "Hello Every Body!!!!!!!",
+        "price": 500,
+        "starRating": 5,
+        "imgUrl": "assets/images/aleppo.jpg",
+        "categoryId": 1
+
+    }
+]

@@ -1,24 +1,79 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http'
 
 import { AppComponent } from './app.component';
-import { ProductListComponant } from './products/product-list.component';
-import { ConvertToSpacePipe } from './shared/convert-to-space.pipe';
-import { StarComponent } from './shared/star.component';
+import { WelcomeComponant } from './home/welcome-componants';
+import { RouterModule } from '@angular/router';
+
+import { CustomInterceptor } from './custom.interceptor';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 @NgModule({
   declarations: [
     AppComponent,
-    StarComponent,
-    ProductListComponant,
-    ConvertToSpacePipe
+    WelcomeComponant
+    // ProductCategoryService
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    HttpClientModule,
+    TranslateModule.forRoot({
+      defaultLanguage:'ar',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+
+    RouterModule.forRoot([
+      {path:'welcome' , component: WelcomeComponant },
+      {
+        path:'products',
+        ///////////////////// lazy load module
+        loadChildren:()=>
+          import('./products/product.module').then(
+            m => m.ProductModule
+          )
+      },
+      {
+        path:'account',
+        ///////////////////// lazy load module
+        loadChildren:()=>
+          import('./account/account.module').then(
+            m => m.AccountModule
+          )
+      },
+      // General Path
+      {path:'' , redirectTo: 'welcome' , pathMatch: 'full' },
+      {path:'**' , redirectTo: 'welcome' , pathMatch: 'full' }
+    ]),
+    StoreModule.forRoot({}, {}),
+    StoreDevtoolsModule.instrument(
+      {
+        name: 'Amazone test app',
+        maxAge: 25,
+        logOnly: !isDevMode()
+      }
+    ),
   ],
-  providers: [],
+  
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
